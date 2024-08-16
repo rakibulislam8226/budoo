@@ -3,8 +3,6 @@ import logging
 from django.contrib.auth.models import BaseUserManager
 from django.utils import timezone
 
-from .choices import UserStatus
-
 logger = logging.getLogger(__name__)
 
 
