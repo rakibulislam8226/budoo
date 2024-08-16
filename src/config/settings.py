@@ -14,6 +14,7 @@ import os
 import sys
 from datetime import timedelta
 from pathlib import Path
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -53,7 +54,9 @@ THIRD_PARTY_APPS = [
     "drf_spectacular",
 ]
 
-PROJECT_APPS = []
+PROJECT_APPS = [
+    "core",
+]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS
 
@@ -71,6 +74,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "config.urls"
+
+AUTH_USER_MODEL = "core.User"
 
 # Enable Django Silk
 ENABLE_SILK = os.getenv("ENABLE_SILK", "False") == "True"
