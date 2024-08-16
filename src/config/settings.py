@@ -10,7 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,8 +33,7 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-
-INSTALLED_APPS = [
+DJANGO_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -38,6 +41,12 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 ]
+THIRD_PARTY_APPS = []
+
+PROJECT_APPS = []
+
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -50,6 +59,19 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "config.urls"
+
+# Enable Django Silk
+ENABLE_SILK = os.getenv("ENABLE_SILK", "False") == "True"
+
+if ENABLE_SILK:
+    INSTALLED_APPS = [
+        "silk",
+    ] + INSTALLED_APPS
+
+    MIDDLEWARE = [
+        "silk.middleware.SilkyMiddleware",
+    ] + MIDDLEWARE
+
 
 TEMPLATES = [
     {
