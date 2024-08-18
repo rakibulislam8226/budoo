@@ -5,6 +5,7 @@ __pycache__/
 *$py.class
 
 db.sqlite3
+celerybeat-schedule.db
 
 env
 venv

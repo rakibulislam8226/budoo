@@ -14,8 +14,7 @@ class UserAdmin(UserAdmin):
     list_display = [
         "phone",
         "uid",
-        "first_name",
-        "last_name",
+        "status",
         "email",
         "slug",
     ]
