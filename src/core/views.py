@@ -3,7 +3,8 @@ from rest_framework import generics
 from rest_framework.permissions import AllowAny
 
 from .models import User
-from .serializer import UserListSerializer
+from .permissions import IsAdminOrSelf
+from .serializers import UserListSerializer
 
 # Create your views here.
 
@@ -25,8 +26,6 @@ class UserListView(generics.ListAPIView):
 class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.filter()
     serializer_class = UserListSerializer
-    permission_classes = [
-        AllowAny
-    ]  # TODO: Change this to IsAdminUser and request.user == self.user
+    permission_classes = [IsAdminOrSelf]
 
     lookup_field = "email"
