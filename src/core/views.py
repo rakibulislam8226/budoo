@@ -13,6 +13,14 @@ class UserListView(generics.ListAPIView):
     serializer_class = UserListSerializer
     permission_classes = [AllowAny]
 
+    def get_queryset(self):
+        qs = User.objects.filter()
+        if status := self.request.query_params.get("status", None):
+            status = status.lower()
+            qs = qs.filter(status__iexact=status)
+
+        return qs
+
 
 class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.filter()
