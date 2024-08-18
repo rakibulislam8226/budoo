@@ -12,3 +12,13 @@ class UserListView(generics.ListAPIView):
     queryset = User.objects.filter()
     serializer_class = UserListSerializer
     permission_classes = [AllowAny]
+
+
+class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.filter()
+    serializer_class = UserListSerializer
+    permission_classes = [
+        AllowAny
+    ]  # TODO: Change this to IsAdminUser and request.user == self.user
+
+    lookup_field = "email"
