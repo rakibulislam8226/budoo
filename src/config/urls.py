@@ -44,6 +44,8 @@ urlpatterns = [
         SpectacularRedocView.as_view(url_name="schema"),
         name="redoc",
     ),
+    # Core/Auth
+    path("", include("core.urls")),
 ]
 
 if settings.ENABLE_SILK:
