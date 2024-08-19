@@ -46,6 +46,8 @@ urlpatterns = [
     ),
     # Core/Auth
     path("", include("core.urls")),
+    # ContentIO for Logs
+    path("logs", include("contentio.urls")),
 ]
 
 if settings.ENABLE_SILK:
