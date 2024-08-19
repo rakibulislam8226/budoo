@@ -22,6 +22,6 @@ app.conf.broker_connection_retry_on_startup = True  # This is to ensure that the
 app.conf.beat_schedule = {
     "user_update_status": {
         "task": "core.tasks.update_active_user_status_to_present",
-        "schedule": crontab(hour=11, minute=50),
+        "schedule": crontab(hour=13, minute=3),
     },
 }
