@@ -11,8 +11,3 @@ class BaseAPITestCase(APITestCase):
         self.client = APIClient()
         self.base_orm = BaseOrmCallApi()
         self.user = self.base_orm.get_user()
-
-    @classmethod
-    def setUpTestData(cls):
-        cls.absent_user = User.objects.create(**payloads.absent_user_payload())
-        cls.present_user = User.objects.create(**payloads.present_user_payload())

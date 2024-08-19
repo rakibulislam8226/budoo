@@ -12,13 +12,16 @@ class LogTrackingListSerializer(serializers.ModelSerializer):
         model = LogsTracking
         fields = [
             "id",
+            "uid",
             "log_type",
             "status",
             "log_data",
             "created_at",
+            "updated_at",
         ]
         read_only_fields = [
             "id",
+            "uid",
             "created_at",
             "updated_at",
         ]

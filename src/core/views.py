@@ -10,7 +10,6 @@ from .serializers import UserListSerializer
 
 
 class UserListView(generics.ListAPIView):
-    queryset = User.objects.filter()
     serializer_class = UserListSerializer
     permission_classes = [AllowAny]
 

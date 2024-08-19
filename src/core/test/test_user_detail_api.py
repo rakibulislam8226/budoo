@@ -21,7 +21,7 @@ class UserDetailViewTests(BaseAPITestCase):
 
     def test_user_detail_get_api(self):
         """Test retrieving user detail"""
-        response = self.client.get(f"/users/{self.absent_user.email}")
+        response = self.client.get(urlhelpers.user_detail_url(self.absent_user.email))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.json()
         self.assertEqual(data["phone"], "+8801111111112")
