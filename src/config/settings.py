@@ -214,7 +214,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 
-# Celery settings
+# Celery settings with redis as broker
 CELERY_BACKEND = os.environ["CELERY_BACKEND"]
 CELERY_BROKER_URL = os.environ["CELERY_BROKER_URL"]
 CELERY_RESULT_BACKEND = os.environ["CELERY_RESULT_BACKEND"]

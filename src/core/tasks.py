@@ -12,34 +12,31 @@ from .models import User
 logging.basicConfig(level=logging.INFO)
 
 
-@shared_task
-def update_active_user_status_to_present():
+@shared_task(bind=True, max_retries=3)
+def update_active_user_status_to_present(self):
     """
-    Mainly designed to update the status of active users to present.
-    Getting the active users is in batches and for update it send to
-    update_batch_wise_status_to_present functions with batch_ids.
+    Updates the status of active users to present in batches and logs the outcome.
     """
     batch_size = int(os.getenv("BATCH_SIZE", 1000))
     active_users = User.objects.filter(is_active=True).values_list("id", flat=True)
     status = LogStatusChoices.SUCCESS
     error_details = None
 
-    for i in range(0, active_users.count(), batch_size):
-        batch_ids = list(active_users[i : i + batch_size])
-        try:
+    try:
+        for i in range(0, len(active_users), batch_size):
+            batch_ids = list(active_users[i : i + batch_size])
             update_batch_wise_status_to_present.delay(batch_ids)
-        except Exception as e:
-            status = LogStatusChoices.FAILED
-            error_details = str(e)
-            store_final_log.delay(status=status, error_details=error_details)
-            return
+    except Exception as e:
+        status = LogStatusChoices.FAILED
+        error_details = str(e)
+        store_final_log.delay(status=status, error_details=error_details)
+        return
 
-    # Storing the final log
     store_final_log.delay(status=status, error_details=error_details)
 
 
-@shared_task
-def update_batch_wise_status_to_present(batch_ids):
+@shared_task(bind=True, max_retries=3)
+def update_batch_wise_status_to_present(self, batch_ids):
     """
     Update the status of users to present in batches.
     """
@@ -48,6 +45,7 @@ def update_batch_wise_status_to_present(batch_ids):
     except Exception as e:
         logging.error(f"Failed to update batch {batch_ids}: {str(e)}")
         store_final_log.delay(status=LogStatusChoices.FAILED, error_details=str(e))
+        self.retry(exc=e, countdown=60)
 
 
 @shared_task
@@ -61,6 +59,6 @@ def store_final_log(status, error_details=None):
     }
     LogsTracking.objects.create(
         log_data=log_data,
-        log_type=LogTypeChoices.ATTENDANCE,
         status=status,
+        log_type=LogTypeChoices.ATTENDANCE,
     )
