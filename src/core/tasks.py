@@ -20,16 +20,16 @@ def update_active_user_status_to_present(self):
     Updates the status of active users to present in batches and logs the outcome.
     """
     try:
-        total_active_users = User.objects.filter(is_active=True).count()
+        total_active_users_count = User.objects.filter(is_active=True).count()
 
-        if total_active_users == 0:
+        if total_active_users_count == 0:
             return
 
         batch_size = int(os.getenv("BATCH_SIZE", 1000))
         status = LogStatusChoices.SUCCESS
         error_details = None
 
-        for offset in range(0, total_active_users, batch_size):
+        for offset in range(0, total_active_users_count, batch_size):
             update_batch_wise_status_to_present.delay(offset, batch_size)
 
     except Exception as e:
