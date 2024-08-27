@@ -48,6 +48,8 @@ urlpatterns = [
     path("", include("core.urls")),
     # ContentIO for Logs
     path("logs", include("contentio.urls")),
+    # Attendence App
+    path("attendence", include("attendence.urls")),
 ]
 
 if settings.ENABLE_SILK:
