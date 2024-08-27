@@ -1,6 +1,11 @@
 from rest_framework import generics
 
 from rest_framework.permissions import IsAuthenticated
+
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
+
+
 from common.permissions import IsOwner
 
 from .models import Attendence
@@ -15,3 +20,18 @@ class AttendenceListView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         return Attendence.objects.select_related("user").filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        instance = serializer.save()
+        self.notify_websocket(instance)
+
+    def notify_websocket(self, instance):
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            "status_updates",
+            {
+                "type": "status_update",
+                "status": instance.status,
+                "user": instance.user.username,
+            },
+        )
