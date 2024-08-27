@@ -1,10 +1,7 @@
-from rest_framework import generics
-
-from rest_framework.permissions import IsAuthenticated
-
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
-
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
 
 from common.permissions import IsOwner
 

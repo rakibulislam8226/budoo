@@ -1,6 +1,6 @@
 from django.db import models
-from common.models import BaseModelWithUID
 
+from common.models import BaseModelWithUID
 from core.choices import UserStatus
 
 
